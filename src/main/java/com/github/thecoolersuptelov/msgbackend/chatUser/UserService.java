@@ -13,9 +13,9 @@ public class UserService {
     }
 
     public User addNewUser(UserDto userToCreation) {
-        var  createdUser = new User(userToCreation);
+        var createdUser = new User(userToCreation);
         userRepository.save(createdUser);
-        return createdUser.getId().toString();
+        return createdUser;
     }
 
 }
