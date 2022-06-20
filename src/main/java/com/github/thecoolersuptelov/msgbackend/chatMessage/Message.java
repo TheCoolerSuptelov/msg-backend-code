@@ -2,6 +2,7 @@ package com.github.thecoolersuptelov.msgbackend.chatMessage;
 
 import com.github.thecoolersuptelov.msgbackend.chat.Chat;
 import com.github.thecoolersuptelov.msgbackend.chatUser.User;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -27,6 +28,7 @@ public class Message {
     private String text;
 
     @Column(name = "created_at")
+    @CreationTimestamp
     private Timestamp created_at;
 
     public Timestamp getCreated_at() {

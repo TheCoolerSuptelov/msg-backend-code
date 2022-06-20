@@ -2,6 +2,7 @@ package com.github.thecoolersuptelov.msgbackend.chatUser;
 
 import com.github.thecoolersuptelov.msgbackend.chat.Chat;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -15,21 +16,28 @@ import java.util.UUID;
 public class User {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "created_at")
+    @CreationTimestamp
     private Timestamp created_at;
 
     @ManyToMany(mappedBy = "users", cascade = CascadeType.DETACH)
     private Set<Chat> chats = new LinkedHashSet<>();
 
+    public User() {
+    }
+
     public Set<Chat> getChats() {
         return chats;
     }
+    public User(UserDto userDto){
 
+    }
     public void setChats(Set<Chat> chats) {
         this.chats = chats;
     }
