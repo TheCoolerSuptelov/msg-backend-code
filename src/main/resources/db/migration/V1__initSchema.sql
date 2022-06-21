@@ -19,19 +19,20 @@ create TABLE message (
    CONSTRAINT pk_message PRIMARY KEY (id)
 );
 
-create TABLE "user" (
+create TABLE userApp (
   id UUID NOT NULL,
    username VARCHAR(255),
    created_at TIMESTAMP WITHOUT TIME ZONE,
    CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
-alter table "user" add CONSTRAINT uc_user_username UNIQUE (username);
+alter table userApp add CONSTRAINT uc_user_username UNIQUE (username);
 
-alter table message add CONSTRAINT FK_MESSAGE_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES "user" (id);
+alter table message add CONSTRAINT FK_MESSAGE_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES userApp (id);
 
 alter table message add CONSTRAINT FK_MESSAGE_ON_CHAT FOREIGN KEY (chat_id) REFERENCES chat (id);
 
 alter table chat_users add CONSTRAINT fk_chause_on_chat FOREIGN KEY (chat_id) REFERENCES chat (id);
 
-alter table chat_users add CONSTRAINT fk_chause_on_user FOREIGN KEY (users_id) REFERENCES "user" (id);
+alter table chat_users add CONSTRAINT fk_chause_on_user FOREIGN KEY (users_id) REFERENCES userApp (id);
+CREATE INDEX "user_app.username" ON userApp(username);
