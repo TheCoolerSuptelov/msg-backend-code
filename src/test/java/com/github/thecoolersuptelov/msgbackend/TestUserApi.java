@@ -21,17 +21,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 public class TestUserApi {
 
-//    @Autowired
-//    public UserService userService;
-    @Autowired
     private final WebApplicationContext webAppContext;
     public MockMvc mockMvc;
+    private final long currentTimeMillis = System.currentTimeMillis();
 
+    public TestUserApi(WebApplicationContext webAppContext){
 
-    public TestUserApi(
-//            UserService userService,
-                       @Autowired WebApplicationContext webAppContext){
-//        this.userService = userService;
         this.webAppContext = webAppContext;
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
     }
@@ -41,7 +36,7 @@ public class TestUserApi {
     public void userCreationTest() throws Exception {
         var responseUserCreation = mockMvc.perform(
                 post("/users/add")
-                        .content("{\"username\": \"user_1\"}")
+                        .content("{\"username\": \"user_"+ currentTimeMillis +"\"}")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
                 .getResponse();
@@ -53,7 +48,7 @@ public class TestUserApi {
     public void shouldRaiseErrorDuplicateUsernameCreation() throws Exception {
         var responseUserCreation = mockMvc.perform(
                         post("/users/add")
-                                .content("{\"username\": \"user_1\"}")
+                                .content("{\"username\": \"user_"+currentTimeMillis+"\"}")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
                 .getResponse();
