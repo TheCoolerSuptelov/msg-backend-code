@@ -1,5 +1,9 @@
 package com.github.thecoolersuptelov.msgbackend.chatUser;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -18,6 +22,7 @@ public class UserDto implements Serializable {
         this.errorDetails = errorDetails;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String errorDetails;
 
     public UserDto(String username, String errorDetails) {
@@ -48,7 +53,7 @@ public class UserDto implements Serializable {
     @Override
     public String toString() {
         String errorDetailsToString = "";
-        if (!this.getErrorDetails().isEmpty()){
+        if (!(errorDetails == null) && errorDetails.isEmpty()){
             errorDetailsToString = ", errorDetails" + this.getErrorDetails();
         }
         // TODO
