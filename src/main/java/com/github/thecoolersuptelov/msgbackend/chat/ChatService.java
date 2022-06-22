@@ -16,6 +16,11 @@ public class ChatService {
     @Autowired
     private UserService userService;
 
+    public ChatService(ChatRepository chatRepository, UserService userService) {
+        this.chatRepository = chatRepository;
+        this.userService = userService;
+    }
+
     public ChatRepository getChatRepository() {
         return chatRepository;
     }

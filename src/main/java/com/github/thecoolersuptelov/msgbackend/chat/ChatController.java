@@ -15,7 +15,12 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-    @PostMapping(value = "add")
+    public ChatController(ChatService chatService) {
+        this.chatService = chatService;
+    }
+
+    // Стало интересно как приложение используя только Rest API получит данные об ID пользователей :D
+    @PostMapping(value = "addByUserName")
     public ResponseEntity<ChatDto> createChatWithUsers(@RequestBody ChatDto chatFromRequest){
         if (chatService.getChatRepository()
                 .findByNameEqualsIgnoreCase(
@@ -25,8 +30,16 @@ public class ChatController {
             chatFromRequest.setErrorDetails("Chat with that name already exist. Please, change name and try again.");
             return new ResponseEntity<>(chatFromRequest, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        return new ResponseEntity<>(chatService.addNewChat(chatFromRequest),
-                HttpStatus.CREATED
-        );
+
+        var processedChat = chatService.addNewChat(chatFromRequest);
+
+        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()){
+            return new ResponseEntity<>(processedChat, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(processedChat,HttpStatus.CREATED);
     }
+
+
+
 }

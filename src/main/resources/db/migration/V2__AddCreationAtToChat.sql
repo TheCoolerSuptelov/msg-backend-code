@@ -1,0 +1,1 @@
+alter table chat add created_at TIMESTAMP WITHOUT TIME ZONE;

@@ -1,8 +1,10 @@
 package com.github.thecoolersuptelov.msgbackend.chat;
 
 import com.github.thecoolersuptelov.msgbackend.chatUser.User;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -12,8 +14,12 @@ import java.util.UUID;
 public class Chat {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private UUID id;
 
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private Timestamp created_at;
     @Column(name = "name")
     private String name;
 

@@ -114,3 +114,10 @@ curl --header "Content-Type: application/json" \
 ```
 
 Ответ: список всех сообщений чата со всеми полями, отсортированный по времени создания сообщения (от раннего к позднему). Или HTTP-код ошибки + описание ошибки.
+
+
+
+GUILTY CURLS :D
+
+curl --header "Content-Type: application/json" --request POST --data "{\"name\": \"chat_1\", \"users\": [\"user_9\", \"user_1\"]}" http://localhost:9000/chats/add
+curl --header "Content-Type: application/json" --request POST    --data "{\"username\": \"user_9\"}"  http://localhost:9000/users/add
