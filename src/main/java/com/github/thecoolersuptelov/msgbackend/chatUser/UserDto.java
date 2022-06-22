@@ -2,17 +2,27 @@ package com.github.thecoolersuptelov.msgbackend.chatUser;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 public class UserDto implements Serializable {
-    public void setUsername(String username) {
+
+    @JsonIgnore
+    private UUID id;
+    private String username;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private String errorDetails;
+
+    public UserDto(String username, String errorDetails) {
         this.username = username;
+        this.errorDetails = errorDetails;
     }
 
-    private String username;
+    public UserDto(User user) {
+        this.username = user.getUsername();
+    }
 
     public String getErrorDetails() {
         return errorDetails;
@@ -22,19 +32,12 @@ public class UserDto implements Serializable {
         this.errorDetails = errorDetails;
     }
 
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private String errorDetails;
-
-    public UserDto(String username, String errorDetails) {
-        this.username = username;
-        this.errorDetails = errorDetails;
-    }
-    public UserDto(User user){
-        this.username = user.getUsername();
-    }
-
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -53,12 +56,12 @@ public class UserDto implements Serializable {
     @Override
     public String toString() {
         String errorDetailsToString = "";
-        if (!(errorDetails == null) && errorDetails.isEmpty()){
+        if (!(errorDetails == null) && errorDetails.isEmpty()) {
             errorDetailsToString = ", errorDetails" + this.getErrorDetails();
         }
         // TODO
         // ternary operator
         return getClass().getSimpleName() + "(" +
-                "username = " + username + errorDetailsToString +")";
+                "username = " + username + errorDetailsToString + ")";
     }
 }
