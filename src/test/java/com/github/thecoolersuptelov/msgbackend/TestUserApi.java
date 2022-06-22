@@ -1,14 +1,13 @@
 package com.github.thecoolersuptelov.msgbackend;
 
-import com.github.thecoolersuptelov.msgbackend.chatUser.UserService;
-import org.junit.jupiter.api.Assertions;
+
+
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -19,6 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestUserApi {
 
     private final WebApplicationContext webAppContext;
@@ -32,8 +32,13 @@ public class TestUserApi {
     }
 
     @Test
-    @Order(0)
-    public void userCreationTest() throws Exception {
+    @Order(1)
+    public void userCreationTest(long currentTimeMillisFromOutside) throws Exception {
+        // TODO
+        // Rename awful param currentTimeMillisFromOutside
+        if (currentTimeMillisFromOutside == 0l){
+            currentTimeMillisFromOutside = currentTimeMillis;
+        }
         var responseUserCreation = mockMvc.perform(
                 post("/users/add")
                         .content("{\"username\": \"user_"+ currentTimeMillis +"\"}")
@@ -44,8 +49,8 @@ public class TestUserApi {
     }
 
     @Test
-    @Order(1)
     public void shouldRaiseErrorDuplicateUsernameCreation() throws Exception {
+        userCreationTest(currentTimeMillis);
         var responseUserCreation = mockMvc.perform(
                         post("/users/add")
                                 .content("{\"username\": \"user_"+currentTimeMillis+"\"}")
