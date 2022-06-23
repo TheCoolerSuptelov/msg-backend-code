@@ -8,6 +8,13 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+@SqlResultSetMapping(name = "createMessage",
+        columns = {
+                @ColumnResult(name="id", type = UUID.class),
+                @ColumnResult(name="chat", type= Chat.class),
+                @ColumnResult(name="author",type= User.class)
+        }
+)
 @Entity
 @Table(name = "message")
 public class Message {

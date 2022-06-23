@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -14,7 +15,7 @@ public class ChatService {
     private ChatRepository chatRepository;
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     public ChatService(ChatRepository chatRepository, UserService userService) {
         this.chatRepository = chatRepository;
@@ -29,9 +30,22 @@ public class ChatService {
         this.chatRepository = chatRepository;
     }
 
-    public ChatDto addNewChat(ChatDto chatFromRequest) {
-        Set<User> usersInChat = userService.getUserRepository().findByUsernameIn(chatFromRequest.getUsers());
-
+    public ChatDto addNewChat(ChatDto chatFromRequest, String userSearchAttribute) {
+        Set<User> usersInChat = null;
+        // TODO
+        // use Strategy pattern
+        // move to userService
+        if (userSearchAttribute == "username") {
+            usersInChat = userService.getUserRepository().findByUsernameIn(chatFromRequest.getUsers());
+        } else {
+            usersInChat = userService.getUserRepository().findByIdIn(
+                    chatFromRequest
+                            .getUsers()
+                            .stream()
+                            .map(e -> UUID.fromString(e))
+                            .collect(Collectors.toSet())
+            );
+        }
         if (chatFromRequest.getUsers().size() != usersInChat.size()) {
             chatFromRequest.setErrorDetails(
                     buildErrorDescriptionUsersNotFound(chatFromRequest.getUsers(), usersInChat)
@@ -55,5 +69,6 @@ public class ChatService {
 
         return "Cannot create chat.Users not found: " + notFoundedUsernames;
     }
+
 
 }

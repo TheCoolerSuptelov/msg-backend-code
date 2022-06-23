@@ -19,9 +19,10 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    // Стало интересно как приложение используя только Rest API получит данные об ID пользователей :D
-    @PostMapping(value = "addByUserName")
-    public ResponseEntity<ChatDto> createChatWithUsers(@RequestBody ChatDto chatFromRequest){
+    @PostMapping(value = "addByUsername")
+    public ResponseEntity<ChatDto> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest){
+        // TODO
+        // Убрать кишки чат сервис. Сделать 1 функции внутри сервиса.
         if (chatService.getChatRepository()
                 .findByNameEqualsIgnoreCase(
                         chatFromRequest.getName()
@@ -31,7 +32,7 @@ public class ChatController {
             return new ResponseEntity<>(chatFromRequest, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        var processedChat = chatService.addNewChat(chatFromRequest);
+        var processedChat = chatService.addNewChat(chatFromRequest, "username");
 
         if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()){
             return new ResponseEntity<>(processedChat, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,6 +41,26 @@ public class ChatController {
         return new ResponseEntity<>(processedChat,HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "add")
+    public ResponseEntity<ChatDto> createChatWithUsers(@RequestBody ChatDto chatFromRequest){
+        // Убрать кишки чат сервис. Сделать 1 функции внутри сервиса.
+        if (chatService.getChatRepository()
+                .findByNameEqualsIgnoreCase(
+                        chatFromRequest.getName()
+                )
+                .isPresent()) {
+            chatFromRequest.setErrorDetails("Chat with that name already exist. Please, change name and try again.");
+            return new ResponseEntity<>(chatFromRequest, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        var processedChat = chatService.addNewChat(chatFromRequest, "Id");
+
+        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()){
+            return new ResponseEntity<>(processedChat, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(processedChat,HttpStatus.CREATED);
+    }
 
 
 }

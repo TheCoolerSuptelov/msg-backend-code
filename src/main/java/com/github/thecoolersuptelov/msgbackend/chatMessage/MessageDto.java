@@ -5,23 +5,24 @@ import com.github.thecoolersuptelov.msgbackend.chatUser.UserDto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 public class MessageDto implements Serializable {
-    private final ChatDto chat;
-    private final UserDto author;
+    private final UUID chat;
+    private final UUID author;
     private final String text;
 
-    public MessageDto(ChatDto chat, UserDto author, String text) {
+    public MessageDto(UUID chat, UUID author, String text) {
         this.chat = chat;
         this.author = author;
         this.text = text;
     }
 
-    public ChatDto getChat() {
+    public UUID getChat() {
         return chat;
     }
 
-    public UserDto getAuthor() {
+    public UUID getAuthor() {
         return author;
     }
 
