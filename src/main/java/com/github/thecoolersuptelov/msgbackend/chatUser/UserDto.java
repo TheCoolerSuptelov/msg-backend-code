@@ -1,16 +1,26 @@
 package com.github.thecoolersuptelov.msgbackend.chatUser;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 public class UserDto implements Serializable {
+    public UUID getId() {
+        return id;
+    }
 
-    @JsonIgnore
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     private UUID id;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String username;
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String errorDetails;
@@ -22,6 +32,7 @@ public class UserDto implements Serializable {
 
     public UserDto(User user) {
         this.username = user.getUsername();
+        this.id = user.getId();
     }
 
     public String getErrorDetails() {
@@ -55,13 +66,8 @@ public class UserDto implements Serializable {
 
     @Override
     public String toString() {
-        String errorDetailsToString = "";
-        if (!(errorDetails == null) && errorDetails.isEmpty()) {
-            errorDetailsToString = ", errorDetails" + this.getErrorDetails();
-        }
-        // TODO
-        // ternary operator
-        return getClass().getSimpleName() + "(" +
-                "username = " + username + errorDetailsToString + ")";
+        return "{" +
+                "id=" + id +
+                '}';
     }
 }
