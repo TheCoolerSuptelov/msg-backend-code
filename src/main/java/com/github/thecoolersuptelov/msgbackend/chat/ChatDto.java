@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ChatDto implements Serializable {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty("chat")
     private UUID id;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String name;

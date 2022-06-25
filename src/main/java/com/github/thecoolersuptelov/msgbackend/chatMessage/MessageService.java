@@ -5,7 +5,9 @@ import com.github.thecoolersuptelov.msgbackend.chatUser.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MessageService {
@@ -29,5 +31,12 @@ public class MessageService {
         Message message = new Message(chatPersist, userAuthor, textMessage);
         messageRepository.save(message);
         return new MessageDto(message);
+    }
+
+    public List<MessageDto> getAllMessagesFromChat(UUID chatId) {
+        return messageRepository.findByChat_IdEqualsOrderByCreated_atAsc(chatId)
+                .stream()
+                .map(MessageDto::new)
+                .collect(Collectors.toList());
     }
 }
