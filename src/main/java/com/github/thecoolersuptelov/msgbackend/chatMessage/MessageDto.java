@@ -18,14 +18,29 @@ public class MessageDto implements Serializable {
 
     public MessageDto(Message message) {
         this.id = message.getId();
+        this.author = message.getAuthor().getId();
+        this.text = message.getText();
+        this.chat = message.getChat().getId();
+    }
+
+    public UUID getChat() {
+        return chat;
     }
 
     public void setChat(UUID chat) {
         this.chat = chat;
     }
 
+    public UUID getAuthor() {
+        return author;
+    }
+
     public void setAuthor(UUID author) {
         this.author = author;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public void setText(String text) {
@@ -39,7 +54,6 @@ public class MessageDto implements Serializable {
     public void setId(UUID id) {
         this.id = id;
     }
-
 
     @Override
     public boolean equals(Object o) {

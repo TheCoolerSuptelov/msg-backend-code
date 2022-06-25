@@ -3,6 +3,8 @@ package com.github.thecoolersuptelov.msgbackend.chatMessage;
 import com.github.thecoolersuptelov.msgbackend.chat.ChatService;
 import com.github.thecoolersuptelov.msgbackend.chatUser.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,10 +21,12 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
-    public MessageDto createMessage(UUID author, UUID chat, String textMessage) {
-        if (!chatService.existUserInChat(chat, author)) {
-            return null;
-        }
+    public boolean existUserInChat(UUID chatId, UUID userId){
+        return chatService.existUserInChat(chatId,userId);
+    }
+
+    public String createMessage(UUID author, UUID chat, String textMessage) {
+
         // TODO
         // 1 sql query instead of 2
         var userAuthor = userService.getUserById(author).get();
@@ -30,7 +34,7 @@ public class MessageService {
 
         Message message = new Message(chatPersist, userAuthor, textMessage);
         messageRepository.save(message);
-        return new MessageDto(message);
+        return message.getId().toString();
     }
 
     public List<MessageDto> getAllMessagesFromChat(UUID chatId) {

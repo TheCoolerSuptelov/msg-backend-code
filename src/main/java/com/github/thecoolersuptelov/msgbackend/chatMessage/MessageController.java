@@ -18,11 +18,17 @@ public class MessageController {
     private MessageService messageService;
 
     @PostMapping(value = "add")
-    public ResponseEntity<MessageDto> createChatWithUsersByUsername(@RequestBody MessageDto messageFromRequest) {
-        MessageDto createdMessage = messageService.createMessage(messageFromRequest.author,
+    public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody MessageDto messageFromRequest) {
+        if (!messageService.existUserInChat(messageFromRequest.getChat(), messageFromRequest.getAuthor())) {
+            return new ResponseEntity<>("User doesn't exist in that chat", HttpStatus.BAD_REQUEST);
+        }
+
+        var createdMessage = messageService.createMessage(messageFromRequest.author,
                 messageFromRequest.chat,
                 messageFromRequest.text
         );
+
+
         return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
     }
 
