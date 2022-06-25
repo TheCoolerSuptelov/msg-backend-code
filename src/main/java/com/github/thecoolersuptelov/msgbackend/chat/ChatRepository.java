@@ -7,4 +7,9 @@ import java.util.UUID;
 
 public interface ChatRepository extends JpaRepository<Chat, UUID> {
     Optional<Chat> findByNameEqualsIgnoreCase(String name);
+
+    Chat findByIdEqualsAndUsers_IdEquals(UUID chatId, UUID userId);
+
+    boolean existsByUsers_IdEqualsAndIdEquals(UUID userId, UUID chatId);
+
 }

@@ -20,7 +20,8 @@ public class UserService {
         userRepository.save(createdUser);
         return createdUser;
     }
-    public Optional<User> getUserById(UUID id){
+
+    public Optional<User> getUserById(UUID id) {
         return userRepository.findById(id);
     }
 

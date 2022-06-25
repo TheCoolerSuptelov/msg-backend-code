@@ -70,5 +70,9 @@ public class ChatService {
         return "Cannot create chat.Users not found: " + notFoundedUsernames;
     }
 
+    public boolean existUserInChat(UUID chatId, UUID userId){
+        return chatRepository.existsByUsers_IdEqualsAndIdEquals(userId, chatId);
+    }
+
 
 }

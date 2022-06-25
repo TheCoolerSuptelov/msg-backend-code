@@ -16,7 +16,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path="add")
+    @PostMapping(path = "add")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userFromRequest) {
         if (userService.getUserRepository()
                 .findByUsernameEqualsIgnoreCase(

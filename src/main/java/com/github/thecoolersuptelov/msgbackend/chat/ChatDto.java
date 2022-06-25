@@ -19,6 +19,7 @@ public class ChatDto implements Serializable {
     private Set<String> users;
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String errorDetails;
+
     public ChatDto(String name, Set<String> users) {
         this.name = name;
         this.users = users;
@@ -29,6 +30,7 @@ public class ChatDto implements Serializable {
         this.name = chat.getName();
         this.users = chat.getUsers().stream().map(User::getUsername).collect(Collectors.toSet());
     }
+
     public ChatDto() {
 
     }

@@ -1,6 +1,5 @@
 package com.github.thecoolersuptelov.msgbackend.chat;
 
-import com.github.thecoolersuptelov.msgbackend.chatUser.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chats/")
 public class ChatController {
     @Autowired
-    private ChatService chatService;
+    private final ChatService chatService;
 
     public ChatController(ChatService chatService) {
         this.chatService = chatService;
     }
 
     @PostMapping(value = "addByUsername")
-    public ResponseEntity<ChatDto> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest){
+    public ResponseEntity<ChatDto> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest) {
         // TODO
         // Убрать кишки чат сервис. Сделать 1 функции внутри сервиса.
         if (chatService.getChatRepository()
@@ -34,15 +33,15 @@ public class ChatController {
 
         var processedChat = chatService.addNewChat(chatFromRequest, "username");
 
-        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()){
+        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()) {
             return new ResponseEntity<>(processedChat, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(processedChat,HttpStatus.CREATED);
+        return new ResponseEntity<>(processedChat, HttpStatus.CREATED);
     }
 
     @PostMapping(value = "add")
-    public ResponseEntity<ChatDto> createChatWithUsers(@RequestBody ChatDto chatFromRequest){
+    public ResponseEntity<ChatDto> createChatWithUsers(@RequestBody ChatDto chatFromRequest) {
         // Убрать кишки чат сервис. Сделать 1 функции внутри сервиса.
         if (chatService.getChatRepository()
                 .findByNameEqualsIgnoreCase(
@@ -55,11 +54,11 @@ public class ChatController {
 
         var processedChat = chatService.addNewChat(chatFromRequest, "Id");
 
-        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()){
+        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()) {
             return new ResponseEntity<>(processedChat, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(processedChat,HttpStatus.CREATED);
+        return new ResponseEntity<>(processedChat, HttpStatus.CREATED);
     }
 
 

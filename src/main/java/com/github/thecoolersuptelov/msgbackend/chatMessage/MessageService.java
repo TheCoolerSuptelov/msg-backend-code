@@ -1,7 +1,6 @@
 package com.github.thecoolersuptelov.msgbackend.chatMessage;
 
 import com.github.thecoolersuptelov.msgbackend.chat.ChatService;
-import com.github.thecoolersuptelov.msgbackend.chatUser.User;
 import com.github.thecoolersuptelov.msgbackend.chatUser.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +17,17 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
-    public MessageDto createMessage(UUID author,UUID chat, String textMessage){
-        //var authorUser = userService.getUserById(author);
-        var messageWithChatUser = messageRepository.findChatAndUserConnected(chat, author);
+    public MessageDto createMessage(UUID author, UUID chat, String textMessage) {
+        if (!chatService.existUserInChat(chat, author)) {
+            return null;
+        }
+        // TODO
+        // 1 sql query instead of 2
+        var userAuthor = userService.getUserById(author).get();
+        var chatPersist = chatService.getChatRepository().findById(chat).get();
 
-        return null;
+        Message message = new Message(chatPersist, userAuthor, textMessage);
+        messageRepository.save(message);
+        return new MessageDto(message);
     }
 }

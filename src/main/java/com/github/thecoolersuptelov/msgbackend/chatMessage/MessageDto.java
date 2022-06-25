@@ -1,16 +1,14 @@
 package com.github.thecoolersuptelov.msgbackend.chatMessage;
 
-import com.github.thecoolersuptelov.msgbackend.chat.ChatDto;
-import com.github.thecoolersuptelov.msgbackend.chatUser.UserDto;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 public class MessageDto implements Serializable {
-    private final UUID chat;
-    private final UUID author;
-    private final String text;
+    UUID chat;
+    UUID author;
+    String text;
+    private UUID id;
 
     public MessageDto(UUID chat, UUID author, String text) {
         this.chat = chat;
@@ -18,17 +16,30 @@ public class MessageDto implements Serializable {
         this.text = text;
     }
 
-    public UUID getChat() {
-        return chat;
+    public MessageDto(Message message) {
+        this.id = message.getId();
     }
 
-    public UUID getAuthor() {
-        return author;
+    public void setChat(UUID chat) {
+        this.chat = chat;
     }
 
-    public String getText() {
-        return text;
+    public void setAuthor(UUID author) {
+        this.author = author;
     }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -47,9 +58,8 @@ public class MessageDto implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "chat = " + chat + ", " +
-                "author = " + author + ", " +
-                "text = " + text + ")";
+        return "" +
+                "id=" + id +
+                ' ';
     }
 }

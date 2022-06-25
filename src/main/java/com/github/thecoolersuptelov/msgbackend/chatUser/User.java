@@ -32,12 +32,14 @@ public class User {
     public User() {
     }
 
+    public User(UserDto userDto) {
+        this.username = userDto.getUsername();
+    }
+
     public Set<Chat> getChats() {
         return chats;
     }
-    public User(UserDto userDto){
-        this.username = userDto.getUsername();
-    }
+
     public void setChats(Set<Chat> chats) {
         this.chats = chats;
     }

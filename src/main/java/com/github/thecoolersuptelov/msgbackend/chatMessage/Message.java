@@ -20,6 +20,7 @@ import java.util.UUID;
 public class Message {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue
     private UUID id;
 
     @OneToOne(cascade = CascadeType.DETACH, orphanRemoval = true)
@@ -37,6 +38,15 @@ public class Message {
     @Column(name = "created_at")
     @CreationTimestamp
     private Timestamp created_at;
+
+    public Message() {
+    }
+
+    public Message(Chat chat, User author, String text) {
+        this.chat = chat;
+        this.author = author;
+        this.text = text;
+    }
 
     public Timestamp getCreated_at() {
         return created_at;

@@ -1,7 +1,5 @@
 package com.github.thecoolersuptelov.msgbackend.chatMessage;
 
-import com.github.thecoolersuptelov.msgbackend.chat.Chat;
-import com.github.thecoolersuptelov.msgbackend.chat.ChatDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +15,11 @@ public class MessageController {
     private MessageService messageService;
 
     @PostMapping(value = "add")
-    public ResponseEntity<MessageDto> createChatWithUsersByUsername(@RequestBody MessageDto messageFromRequest){
-        var xx = messageService.createMessage(messageFromRequest.getAuthor(),
-                messageFromRequest.getChat(),
-                messageFromRequest.getText()
+    public ResponseEntity<MessageDto> createChatWithUsersByUsername(@RequestBody MessageDto messageFromRequest) {
+        MessageDto createdMessage = messageService.createMessage(messageFromRequest.author,
+                messageFromRequest.chat,
+                messageFromRequest.text
         );
-        return new ResponseEntity<>(xx,HttpStatus.CREATED);
+        return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
     }
 }
