@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class UserDto implements Serializable {
+    @JsonProperty("user")
     private UUID id;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String username;

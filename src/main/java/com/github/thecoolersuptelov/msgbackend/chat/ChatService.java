@@ -5,6 +5,7 @@ import com.github.thecoolersuptelov.msgbackend.chatUser.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -74,5 +75,12 @@ public class ChatService {
         return chatRepository.existsByUsers_IdEqualsAndIdEquals(userId, chatId);
     }
 
+    public List<ChatDto> getAllChatsByUser(UUID userUuid){
+        var xx = chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid);
 
+        return xx
+                .stream()
+                .map(ChatDto::new)
+                .collect(Collectors.toList());
+    }
 }

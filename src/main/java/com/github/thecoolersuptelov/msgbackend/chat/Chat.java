@@ -16,6 +16,7 @@ public class Chat {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
+    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
     @Column(name = "created_at")

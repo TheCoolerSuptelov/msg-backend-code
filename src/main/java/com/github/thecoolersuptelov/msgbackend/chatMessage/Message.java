@@ -21,6 +21,7 @@ public class Message {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
+    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
     @OneToOne(cascade = CascadeType.DETACH, orphanRemoval = true)
