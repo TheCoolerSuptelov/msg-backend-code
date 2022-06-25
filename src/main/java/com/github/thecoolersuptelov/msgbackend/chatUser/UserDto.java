@@ -14,10 +14,12 @@ public class UserDto implements Serializable {
     private String username;
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String errorDetails;
+
     public UserDto(String username, String errorDetails) {
         this.username = username;
         this.errorDetails = errorDetails;
     }
+
     public UserDto(User user) {
         this.username = user.getUsername();
         this.id = user.getId();

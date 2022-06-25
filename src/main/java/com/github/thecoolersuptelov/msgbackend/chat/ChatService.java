@@ -13,10 +13,9 @@ import java.util.stream.Collectors;
 @Service
 public class ChatService {
     @Autowired
-    private ChatRepository chatRepository;
-
-    @Autowired
     private final UserService userService;
+    @Autowired
+    private ChatRepository chatRepository;
 
     public ChatService(ChatRepository chatRepository, UserService userService) {
         this.chatRepository = chatRepository;
@@ -71,11 +70,11 @@ public class ChatService {
         return "Cannot create chat.Users not found: " + notFoundedUsernames;
     }
 
-    public boolean existUserInChat(UUID chatId, UUID userId){
+    public boolean existUserInChat(UUID chatId, UUID userId) {
         return chatRepository.existsByUsers_IdEqualsAndIdEquals(userId, chatId);
     }
 
-    public List<ChatDto> getAllChatsByUser(UUID userUuid){
+    public List<ChatDto> getAllChatsByUser(UUID userUuid) {
         var xx = chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid);
 
         return xx

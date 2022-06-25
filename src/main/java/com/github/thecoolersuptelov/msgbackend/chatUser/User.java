@@ -17,7 +17,7 @@ public class User {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
+    @org.hibernate.annotations.Type(type = "org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
     @Column(name = "username", unique = true)

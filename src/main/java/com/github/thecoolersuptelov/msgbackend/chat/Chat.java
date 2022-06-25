@@ -2,7 +2,6 @@ package com.github.thecoolersuptelov.msgbackend.chat;
 
 import com.github.thecoolersuptelov.msgbackend.chatUser.User;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -16,7 +15,7 @@ public class Chat {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
+    @org.hibernate.annotations.Type(type = "org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
     @Column(name = "created_at")

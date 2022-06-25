@@ -10,9 +10,9 @@ import java.util.UUID;
 
 @SqlResultSetMapping(name = "createMessage",
         columns = {
-                @ColumnResult(name="id", type = UUID.class),
-                @ColumnResult(name="chat", type= Chat.class),
-                @ColumnResult(name="author",type= User.class)
+                @ColumnResult(name = "id", type = UUID.class),
+                @ColumnResult(name = "chat", type = Chat.class),
+                @ColumnResult(name = "author", type = User.class)
         }
 )
 @Entity
@@ -21,7 +21,7 @@ public class Message {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue
-    @org.hibernate.annotations.Type(type="org.hibernate.type.PostgresUUIDType")
+    @org.hibernate.annotations.Type(type = "org.hibernate.type.PostgresUUIDType")
     private UUID id;
 
     @OneToOne(cascade = CascadeType.DETACH, orphanRemoval = true)

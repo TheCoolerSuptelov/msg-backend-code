@@ -1,18 +1,12 @@
 package com.github.thecoolersuptelov.msgbackend.chatMessage;
 
-import com.github.thecoolersuptelov.msgbackend.chat.Chat;
-import com.github.thecoolersuptelov.msgbackend.chatUser.User;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.SqlResultSetMapping;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
@@ -42,7 +36,6 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
             nativeQuery = true)
     List<Object[]> findAuthorAndChat(@Param("chatId") UUID chatId,
                                      @Param("userId")UUID userId);*/
-
 
 
 }
