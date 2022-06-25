@@ -17,17 +17,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(path = "add")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userFromRequest) {
-        if (userService.getUserRepository()
-                .findByUsernameEqualsIgnoreCase(
-                        userFromRequest.getUsername()
-                )
-                .isPresent()) {
-            userFromRequest.setErrorDetails("User with this username already exist."
-                    + " Please, change username and try again.");
-            return new ResponseEntity<>(userFromRequest, HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<String> createUser(@RequestBody UserDto userFromRequest) {
+        if (userService.isUserExist(userFromRequest.getUsername())) {
+            return new ResponseEntity<>("User with this username already exist."
+                    + " Please, change username and try again.", HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        return new ResponseEntity<>(new UserDto(userService.addNewUser(userFromRequest)),
+        return new ResponseEntity<>(userService.addNewUser(userFromRequest).getId().toString(),
                 HttpStatus.CREATED
         );
     }

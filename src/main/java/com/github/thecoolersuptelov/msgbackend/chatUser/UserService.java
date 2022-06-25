@@ -25,4 +25,8 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public boolean isUserExist(String username){
+       return userRepository.existsByUsernameEquals(username);
+    }
+
 }

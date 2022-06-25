@@ -9,7 +9,5 @@ class MsgbackendApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-	// TODO
-	// Test to user controller
 
 }

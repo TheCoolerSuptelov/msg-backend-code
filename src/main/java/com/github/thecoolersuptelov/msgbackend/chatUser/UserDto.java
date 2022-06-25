@@ -1,6 +1,5 @@
 package com.github.thecoolersuptelov.msgbackend.chatUser;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -10,9 +9,9 @@ import java.util.UUID;
 public class UserDto implements Serializable {
     @JsonProperty("user")
     private UUID id;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
     private String username;
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+
     private String errorDetails;
 
     public UserDto(String username, String errorDetails) {
