@@ -1,6 +1,5 @@
 package com.github.thecoolersuptelov.msgbackend.chat;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.thecoolersuptelov.msgbackend.chatUser.User;
 
@@ -13,12 +12,10 @@ import java.util.stream.Collectors;
 public class ChatDto implements Serializable {
     @JsonProperty("chat")
     private UUID id;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
     private String name;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
     private Set<String> users;
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private String errorDetails;
 
     public ChatDto(String name, Set<String> users) {
         this.name = name;
@@ -35,20 +32,31 @@ public class ChatDto implements Serializable {
 
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChatDto entity = (ChatDto) o;
+        return Objects.equals(this.name, entity.name) && Objects.equals(this.users, entity.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, users);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" + "name = " + name + ", " + "users = " + users + ")";
+    }
+
     public UUID getId() {
         return id;
     }
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getErrorDetails() {
-        return errorDetails;
-    }
-
-    public void setErrorDetails(String errorDetails) {
-        this.errorDetails = errorDetails;
     }
 
     public String getName() {
@@ -63,24 +71,7 @@ public class ChatDto implements Serializable {
         return users;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChatDto entity = (ChatDto) o;
-        return Objects.equals(this.name, entity.name) &&
-                Objects.equals(this.users, entity.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, users);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "name = " + name + ", " +
-                "users = " + users + ")";
+    public void setUsers(Set<String> users) {
+        this.users = users;
     }
 }

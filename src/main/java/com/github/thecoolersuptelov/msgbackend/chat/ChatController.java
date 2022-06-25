@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/chats/")
@@ -22,45 +23,22 @@ public class ChatController {
     }
 
     @PostMapping(value = "addByUsername")
-    public ResponseEntity<ChatDto> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest) {
-        // TODO
-        // Убрать кишки чат сервис. Сделать 1 функции внутри сервиса.
-        if (chatService.getChatRepository()
-                .findByNameEqualsIgnoreCase(
-                        chatFromRequest.getName()
-                )
-                .isPresent()) {
-            chatFromRequest.setErrorDetails("Chat with that name already exist. Please, change name and try again.");
-            return new ResponseEntity<>(chatFromRequest, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-
-        var processedChat = chatService.addNewChat(chatFromRequest, "username");
-
-        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()) {
-            return new ResponseEntity<>(processedChat, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return new ResponseEntity<>(processedChat, HttpStatus.CREATED);
+    public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest) {
+        return createChatWithUsers(chatFromRequest, "username");
     }
-
     @PostMapping(value = "add")
-    public ResponseEntity<ChatDto> createChatWithUsers(@RequestBody ChatDto chatFromRequest) {
+    public ResponseEntity<String> createChatWithUsers(@RequestBody ChatDto chatFromRequest, String findBy) {
         // Убрать кишки чат сервис. Сделать 1 функции внутри сервиса.
-        if (chatService.getChatRepository()
-                .findByNameEqualsIgnoreCase(
-                        chatFromRequest.getName()
-                )
-                .isPresent()) {
-            chatFromRequest.setErrorDetails("Chat with that name already exist. Please, change name and try again.");
-            return new ResponseEntity<>(chatFromRequest, HttpStatus.UNPROCESSABLE_ENTITY);
+        if (chatService.isUserInAChat(chatFromRequest)) {
+            return new ResponseEntity<>("Chat with that name already exist. Please, change name and try again.",
+                    HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
-        var processedChat = chatService.addNewChat(chatFromRequest, "Id");
-
-        if (processedChat.getErrorDetails() == null || processedChat.getErrorDetails().isEmpty()) {
-            return new ResponseEntity<>(processedChat, HttpStatus.INTERNAL_SERVER_ERROR);
+        String processedChat;
+        if (findBy != null && !findBy.isEmpty()){
+           processedChat = chatService.addNewChat(chatFromRequest, findBy);
+        }else {
+            processedChat = chatService.addNewChat(chatFromRequest, "Id");
         }
-
         return new ResponseEntity<>(processedChat, HttpStatus.CREATED);
     }
 

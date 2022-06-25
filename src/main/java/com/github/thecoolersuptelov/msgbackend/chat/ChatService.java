@@ -29,8 +29,14 @@ public class ChatService {
     public void setChatRepository(ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
     }
-
-    public ChatDto addNewChat(ChatDto chatFromRequest, String userSearchAttribute) {
+    boolean isUserInAChat(ChatDto chatFromRequest) {
+        return getChatRepository()
+                .findByNameEqualsIgnoreCase(
+                        chatFromRequest.getName()
+                )
+                .isPresent();
+    }
+    public String addNewChat(ChatDto chatFromRequest, String userSearchAttribute) {
         Set<User> usersInChat = null;
         // TODO
         // use Strategy pattern
@@ -47,17 +53,14 @@ public class ChatService {
             );
         }
         if (chatFromRequest.getUsers().size() != usersInChat.size()) {
-            chatFromRequest.setErrorDetails(
-                    buildErrorDescriptionUsersNotFound(chatFromRequest.getUsers(), usersInChat)
-            );
-            return chatFromRequest;
+            return buildErrorDescriptionUsersNotFound(chatFromRequest.getUsers(), usersInChat);
         }
 
         Chat createdChat = new Chat();
         createdChat.setName(chatFromRequest.getName());
         createdChat.setUsers(usersInChat);
         chatRepository.save(createdChat);
-        return new ChatDto(createdChat);
+        return createdChat.getId().toString();
     }
 
     public String buildErrorDescriptionUsersNotFound(Set<String> usersFromRequest, Set<User> usersAlreadyExist) {
@@ -75,9 +78,7 @@ public class ChatService {
     }
 
     public List<ChatDto> getAllChatsByUser(UUID userUuid) {
-        var xx = chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid);
-
-        return xx
+        return chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid)
                 .stream()
                 .map(ChatDto::new)
                 .collect(Collectors.toList());
