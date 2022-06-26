@@ -23,8 +23,6 @@ public class TestUserApi {
 
     private final WebApplicationContext webAppContext;
     public MockMvc mockMvc;
-    private final long currentTimeMillis = System.currentTimeMillis();
-
     public TestUserApi(WebApplicationContext webAppContext){
 
         this.webAppContext = webAppContext;
@@ -33,12 +31,8 @@ public class TestUserApi {
 
     @Test
     @Order(1)
-    public void userCreationTest(long currentTimeMillisFromOutside) throws Exception {
-        // TODO
-        // Rename awful param currentTimeMillisFromOutside
-        if (currentTimeMillisFromOutside == 0l){
-            currentTimeMillisFromOutside = currentTimeMillis;
-        }
+    public void userCreationTest() throws Exception {
+        long currentTimeMillis = System.currentTimeMillis();
         var responseUserCreation = mockMvc.perform(
                 post("/users/add")
                         .content("{\"username\": \"user_"+ currentTimeMillis +"\"}")
@@ -50,8 +44,16 @@ public class TestUserApi {
 
     @Test
     public void shouldRaiseErrorDuplicateUsernameCreation() throws Exception {
-        userCreationTest(currentTimeMillis);
+        long currentTimeMillis = System.currentTimeMillis();
         var responseUserCreation = mockMvc.perform(
+                        post("/users/add")
+                                .content("{\"username\": \"user_"+ currentTimeMillis +"\"}")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse();
+        assertEquals(201,responseUserCreation.getStatus());
+
+        var doubleResponseUserCreation = mockMvc.perform(
                         post("/users/add")
                                 .content("{\"username\": \"user_"+currentTimeMillis+"\"}")
                                 .contentType(MediaType.APPLICATION_JSON))

@@ -1,14 +1,11 @@
-version: "3.9"
+version: '3.3'
 services:
-  postgres:
-    image: postgres:13.3
-    environment:
-      POSTGRES_DB: "msgbackend_test-d"
-      POSTGRES_USER: "msgbackend_test"
-      POSTGRES_PASSWORD: "msgbackend_test"
-      PGDATA: "/var/lib/postgresql/data/pgdata"
-    volumes:
-        - "..\\main\\resources\\db\\migration\\docker-entrypoint-initdb.d"
-        - "var\\lib\\postgresql\\data
+  run:
+    container_name: pgSql-test2
     ports:
-      - "1000:5432"
+      - '1000:5432'
+    environment:
+      - POSTGRES_USER=msgbackend_test
+      - POSTGRES_PASSWORD=msgbackend_test
+      - POSTGRES_DB=msgbackend_test-d
+    image: run
