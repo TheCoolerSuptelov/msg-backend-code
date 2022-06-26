@@ -2,7 +2,9 @@ package com.github.thecoolersuptelov.msgbackend.chat;
 
 import com.github.thecoolersuptelov.msgbackend.chatUser.User;
 import com.github.thecoolersuptelov.msgbackend.chatUser.UserService;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -77,8 +79,9 @@ public class ChatService {
         return chatRepository.existsByUsers_IdEqualsAndIdEquals(userId, chatId);
     }
 
-    public List<ChatDto> getAllChatsByUser(UUID userUuid) {
-        return chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid)
+    public List<ChatDto> getAllChatsByUser(UUID userUuid, Integer pageNo, Integer pageSize) {
+        var paging  = PageRequest.of(pageNo, pageSize);
+        return chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid,paging)
                 .stream()
                 .map(ChatDto::new)
                 .collect(Collectors.toList());

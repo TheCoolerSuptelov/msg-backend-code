@@ -4,10 +4,7 @@ import com.github.thecoolersuptelov.msgbackend.chatUser.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,9 +41,10 @@ public class ChatController {
 
 
     @PostMapping(value = "get")
-    public ResponseEntity<List<ChatDto>> getAllUserChats(@RequestBody UserDto userDto) {
-
-        List<ChatDto> chats = chatService.getAllChatsByUser(userDto.getId());
+    public ResponseEntity<List<ChatDto>> getAllUserChats(@RequestBody UserDto userDto,
+                                                         @RequestParam(defaultValue = "0") Integer pageNo,
+                                                         @RequestParam(defaultValue = "50") Integer pageSize) {
+        List<ChatDto> chats = chatService.getAllChatsByUser(userDto.getId(), pageNo,pageSize);
         return new ResponseEntity<>(chats, HttpStatus.CREATED);
     }
 }
