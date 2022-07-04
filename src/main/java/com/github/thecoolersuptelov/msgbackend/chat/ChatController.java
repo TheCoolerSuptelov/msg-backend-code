@@ -25,7 +25,11 @@ public class ChatController {
 
     @PostMapping(value = "add")
     public ResponseEntity<String> createChatWithUsers(@RequestBody ChatDto chatFromRequest, String findBy) {
-        return chatService.addNewChat(chatFromRequest, findBy);
+        try {
+            return chatService.addNewChat(chatFromRequest, findBy);
+        } catch (ChatCreationException e) {
+            throw new RuntimeException("Cannot create chat." + e.getMessage());
+        }
     }
 
 

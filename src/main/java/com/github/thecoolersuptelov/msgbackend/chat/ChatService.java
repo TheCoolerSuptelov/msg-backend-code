@@ -37,23 +37,22 @@ public class ChatService {
         return chatRepository.findByNameEqualsIgnoreCase(chat.getName()).isPresent();
     }
 
-    public ResponseEntity<String> addNewChat(ChatDto chat, String userSearchAttribute) {
-        Set<User> usersInChat = null;
+    public ResponseEntity<String> addNewChat(ChatDto chat, String userSearchAttribute) throws ChatCreationException {
         if (isUserInAChat(chat)) {
-            return new ResponseEntity<>("Chat with that name already exist. Please, change name and try again.", HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new ChatCreationException("Chat with that name already exist. Please, change name and try again.");
         }
         if (userSearchAttribute == null && userSearchAttribute.isEmpty()) {
             userSearchAttribute = "Id";
         }
 
+        Set<User> usersInChat = null;
         if ("username".equals(userSearchAttribute)) {
             usersInChat = userRepository.findByUsernameIn(chat.getUsers());
         } else {
             usersInChat = userRepository.findByIdIn(chat.getUsers().stream().map(e -> UUID.fromString(e)).collect(Collectors.toSet()));
         }
         if (chat.getUsers().size() != usersInChat.size()) {
-            return new ResponseEntity<>(buildErrorDescriptionUsersNotFound(chat.getUsers(), usersInChat),
-                    HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new ChatCreationException(buildErrorDescriptionUsersNotFound(chat.getUsers(), usersInChat));
         }
 
         Chat createdChat = new Chat();
