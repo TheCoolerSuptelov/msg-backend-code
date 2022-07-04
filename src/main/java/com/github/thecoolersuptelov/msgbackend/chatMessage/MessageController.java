@@ -18,9 +18,9 @@ public class MessageController {
     private MessageService messageService;
 
     @PostMapping(value = "add")
-    public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody MessageDto messageFromRequest) {
+    public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody MessageDto message) {
         try {
-            return new ResponseEntity<>(messageService.createMessage(messageFromRequest.author, messageFromRequest.chat, messageFromRequest.text), HttpStatus.CREATED);
+            return new ResponseEntity<>(messageService.createMessage(message.author, message.chat, message.text), HttpStatus.CREATED);
         } catch (MessageCreationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

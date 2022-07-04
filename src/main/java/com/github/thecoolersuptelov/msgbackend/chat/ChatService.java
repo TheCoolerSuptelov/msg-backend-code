@@ -33,13 +33,13 @@ public class ChatService {
         this.chatRepository = chatRepository;
     }
 
-    boolean isUserInAChat(ChatDto chatFromRequest) {
-        return chatRepository.findByNameEqualsIgnoreCase(chatFromRequest.getName()).isPresent();
+    boolean isUserInAChat(ChatDto chat) {
+        return chatRepository.findByNameEqualsIgnoreCase(chat.getName()).isPresent();
     }
 
-    public ResponseEntity<String> addNewChat(ChatDto chatFromRequest, String userSearchAttribute) {
+    public ResponseEntity<String> addNewChat(ChatDto chat, String userSearchAttribute) {
         Set<User> usersInChat = null;
-        if (isUserInAChat(chatFromRequest)) {
+        if (isUserInAChat(chat)) {
             return new ResponseEntity<>("Chat with that name already exist. Please, change name and try again.", HttpStatus.UNPROCESSABLE_ENTITY);
         }
         if (userSearchAttribute == null && userSearchAttribute.isEmpty()) {
@@ -47,25 +47,25 @@ public class ChatService {
         }
 
         if ("username".equals(userSearchAttribute)) {
-            usersInChat = userRepository.findByUsernameIn(chatFromRequest.getUsers());
+            usersInChat = userRepository.findByUsernameIn(chat.getUsers());
         } else {
-            usersInChat = userRepository.findByIdIn(chatFromRequest.getUsers().stream().map(e -> UUID.fromString(e)).collect(Collectors.toSet()));
+            usersInChat = userRepository.findByIdIn(chat.getUsers().stream().map(e -> UUID.fromString(e)).collect(Collectors.toSet()));
         }
-        if (chatFromRequest.getUsers().size() != usersInChat.size()) {
-            return new ResponseEntity<>(buildErrorDescriptionUsersNotFound(chatFromRequest.getUsers(), usersInChat),
+        if (chat.getUsers().size() != usersInChat.size()) {
+            return new ResponseEntity<>(buildErrorDescriptionUsersNotFound(chat.getUsers(), usersInChat),
                     HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         Chat createdChat = new Chat();
-        createdChat.setName(chatFromRequest.getName());
+        createdChat.setName(chat.getName());
         createdChat.setUsers(usersInChat);
         chatRepository.save(createdChat);
         return new ResponseEntity<>(createdChat.getId().toString(),HttpStatus.CREATED);
         }
 
-    public String buildErrorDescriptionUsersNotFound(Set<String> usersFromRequest, Set<User> usersAlreadyExist) {
+    public String buildErrorDescriptionUsersNotFound(Set<String> users, Set<User> usersAlreadyExist) {
 
-        String notFoundedUsernames = usersAlreadyExist.stream().filter(e -> !usersFromRequest.contains(e)).map(e -> e.getUsername()).collect(Collectors.joining(","));
+        String notFoundedUsernames = usersAlreadyExist.stream().filter(e -> !users.contains(e)).map(e -> e.getUsername()).collect(Collectors.joining(","));
 
         return "Cannot create chat.Users not found: " + notFoundedUsernames;
     }
