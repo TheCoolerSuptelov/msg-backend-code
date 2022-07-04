@@ -59,6 +59,6 @@ public class TestUserApi {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
                 .getResponse();
-        assertEquals(422,responseUserCreation.getStatus());
+        assertEquals(422,doubleResponseUserCreation.getStatus());
     }
 }

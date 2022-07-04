@@ -31,13 +31,11 @@ public class ChatService {
     public void setChatRepository(ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
     }
+
     boolean isUserInAChat(ChatDto chatFromRequest) {
-        return getChatRepository()
-                .findByNameEqualsIgnoreCase(
-                        chatFromRequest.getName()
-                )
-                .isPresent();
+        return getChatRepository().findByNameEqualsIgnoreCase(chatFromRequest.getName()).isPresent();
     }
+
     public String addNewChat(ChatDto chatFromRequest, String userSearchAttribute) {
         Set<User> usersInChat = null;
         // TODO
@@ -46,13 +44,7 @@ public class ChatService {
         if (userSearchAttribute == "username") {
             usersInChat = userService.getUserRepository().findByUsernameIn(chatFromRequest.getUsers());
         } else {
-            usersInChat = userService.getUserRepository().findByIdIn(
-                    chatFromRequest
-                            .getUsers()
-                            .stream()
-                            .map(e -> UUID.fromString(e))
-                            .collect(Collectors.toSet())
-            );
+            usersInChat = userService.getUserRepository().findByIdIn(chatFromRequest.getUsers().stream().map(e -> UUID.fromString(e)).collect(Collectors.toSet()));
         }
         if (chatFromRequest.getUsers().size() != usersInChat.size()) {
             return buildErrorDescriptionUsersNotFound(chatFromRequest.getUsers(), usersInChat);
@@ -67,10 +59,7 @@ public class ChatService {
 
     public String buildErrorDescriptionUsersNotFound(Set<String> usersFromRequest, Set<User> usersAlreadyExist) {
 
-        String notFoundedUsernames = usersAlreadyExist.stream()
-                .filter(e -> !usersFromRequest.contains(e))
-                .map(e -> e.getUsername())
-                .collect(Collectors.joining(","));
+        String notFoundedUsernames = usersAlreadyExist.stream().filter(e -> !usersFromRequest.contains(e)).map(e -> e.getUsername()).collect(Collectors.joining(","));
 
         return "Cannot create chat.Users not found: " + notFoundedUsernames;
     }
@@ -80,10 +69,7 @@ public class ChatService {
     }
 
     public List<ChatDto> getAllChatsByUser(UUID userUuid, Integer pageNo, Integer pageSize) {
-        var paging  = PageRequest.of(pageNo, pageSize);
-        return chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid,paging)
-                .stream()
-                .map(ChatDto::new)
-                .collect(Collectors.toList());
+        var paging = PageRequest.of(pageNo, pageSize);
+        return chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid, paging).stream().map(ChatDto::new).collect(Collectors.toList());
     }
 }
