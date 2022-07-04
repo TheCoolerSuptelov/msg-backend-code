@@ -19,23 +19,15 @@ public class MessageController {
 
     @PostMapping(value = "add")
     public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody MessageDto messageFromRequest) {
-        if (!messageService.existUserInChat(messageFromRequest.getChat(), messageFromRequest.getAuthor())) {
-            return new ResponseEntity<>("User doesn't exist in that chat", HttpStatus.BAD_REQUEST);
+        try {
+            return new ResponseEntity<>(messageService.createMessage(messageFromRequest.author, messageFromRequest.chat, messageFromRequest.text), HttpStatus.CREATED);
+        } catch (MessageCreationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-        var createdMessage = messageService.createMessage(messageFromRequest.author,
-                messageFromRequest.chat,
-                messageFromRequest.text
-        );
-
-
-        return new ResponseEntity<>(createdMessage, HttpStatus.CREATED);
     }
 
     @PostMapping(value = "get")
     public ResponseEntity<List<MessageDto>> getAllMessagesFromChat(@RequestBody ChatDto chatDto) {
-        var xx = messageService.getAllMessagesFromChat(chatDto.getId());
-
-        return new ResponseEntity<>(xx, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(messageService.getAllMessagesFromChat(chatDto.getId()), HttpStatus.ACCEPTED);
     }
 }

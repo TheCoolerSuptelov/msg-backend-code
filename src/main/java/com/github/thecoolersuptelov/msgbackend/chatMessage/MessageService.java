@@ -3,6 +3,8 @@ package com.github.thecoolersuptelov.msgbackend.chatMessage;
 import com.github.thecoolersuptelov.msgbackend.chat.ChatRepository;
 import com.github.thecoolersuptelov.msgbackend.chatUser.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +19,13 @@ public class MessageService {
     private UserRepository userRepository;
     @Autowired
     private MessageRepository messageRepository;
-
-    public String createMessage(UUID author, UUID chat, String textMessage) {
-
+    public boolean existUserInChat(UUID chatId, UUID userId){
+        return chatRepository.existsByUsers_IdEqualsAndIdEquals(chatId,userId);
+    }
+    public String createMessage(UUID author, UUID chat, String textMessage) throws MessageCreationException {
+        if (!existUserInChat(chat, author)) {
+            throw new MessageCreationException("User doesn't exist in that chat.");
+        }
         var userAuthor = userRepository.findById(author).get();
         var chatPersist = chatRepository.findById(chat).get();
 
