@@ -2,6 +2,7 @@ package com.github.thecoolersuptelov.msgbackend.chat;
 
 import com.github.thecoolersuptelov.msgbackend.chatUser.User;
 import com.github.thecoolersuptelov.msgbackend.chatUser.UserRepository;
+import com.github.thecoolersuptelov.msgbackend.chatUser.UserSearchStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -37,16 +38,16 @@ public class ChatService {
         return chatRepository.findByNameEqualsIgnoreCase(chat.getName()).isPresent();
     }
 
-    public ResponseEntity<String> addNewChat(ChatDto chat, String userSearchAttribute) throws ChatCreationException {
+    public ResponseEntity<String> addNewChat(ChatDto chat, UserSearchStrategy userSearchAttribute) throws ChatCreationException {
         if (isUserInAChat(chat)) {
             throw new ChatCreationException("Chat with that name already exist. Please, change name and try again.");
         }
-        if (userSearchAttribute == null && userSearchAttribute.isEmpty()) {
-            userSearchAttribute = "Id";
+        if (userSearchAttribute == null) {
+            userSearchAttribute = UserSearchStrategy.ByID;
         }
 
         Set<User> usersInChat = null;
-        if ("username".equals(userSearchAttribute)) {
+        if (UserSearchStrategy.ByUsername == userSearchAttribute) {
             usersInChat = userRepository.findByUsernameIn(chat.getUsers());
         } else {
             usersInChat = userRepository.findByIdIn(chat.getUsers().stream().map(e -> UUID.fromString(e)).collect(Collectors.toSet()));
@@ -59,8 +60,8 @@ public class ChatService {
         createdChat.setName(chat.getName());
         createdChat.setUsers(usersInChat);
         chatRepository.save(createdChat);
-        return new ResponseEntity<>(createdChat.getId().toString(),HttpStatus.CREATED);
-        }
+        return new ResponseEntity<>(createdChat.getId().toString(), HttpStatus.CREATED);
+    }
 
     public String buildErrorDescriptionUsersNotFound(Set<String> users, Set<User> usersAlreadyExist) {
 

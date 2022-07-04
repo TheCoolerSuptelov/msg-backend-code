@@ -1,6 +1,7 @@
 package com.github.thecoolersuptelov.msgbackend.chat;
 
 import com.github.thecoolersuptelov.msgbackend.chatUser.UserDto;
+import com.github.thecoolersuptelov.msgbackend.chatUser.UserSearchStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,11 @@ public class ChatController {
 
     @PostMapping(value = "addByUsername")
     public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest) {
-        return createChatWithUsers(chatFromRequest, "username");
+        return createChatWithUsers(chatFromRequest, UserSearchStrategy.ByID);
     }
 
     @PostMapping(value = "add")
-    public ResponseEntity<String> createChatWithUsers(@RequestBody ChatDto chatFromRequest, String findBy) {
+    public ResponseEntity<String> createChatWithUsers(@RequestBody ChatDto chatFromRequest, UserSearchStrategy findBy) {
         try {
             return chatService.addNewChat(chatFromRequest, findBy);
         } catch (ChatCreationException e) {
