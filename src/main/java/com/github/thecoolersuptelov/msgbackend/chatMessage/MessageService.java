@@ -20,7 +20,7 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
     public boolean existUserInChat(UUID chatId, UUID userId){
-        return chatRepository.existsByUsers_IdEqualsAndIdEquals(chatId,userId);
+        return chatRepository.existsByUsers_IdEqualsAndIdEquals(userId,chatId);
     }
     public String createMessage(UUID author, UUID chat, String textMessage) throws MessageCreationException {
         if (!existUserInChat(chat, author)) {

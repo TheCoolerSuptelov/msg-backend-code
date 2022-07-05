@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -20,7 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class ChatControllerTest {
     private final WebApplicationContext webAppContext;
     public MockMvc mockMvc;
-    public ChatControllerTest(WebApplicationContext webAppContext){
+
+    public ChatControllerTest(WebApplicationContext webAppContext) {
 
         this.webAppContext = webAppContext;
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
@@ -28,24 +30,19 @@ public class ChatControllerTest {
 
     @Test
     @Order(1)
-    public void should_ReturnCreated_then_createdChat()throws Exception{
+    public void should_ReturnCreated_then_createdChat() throws Exception {
         long currentTimeMillis = System.currentTimeMillis();
-        var chatCreation = mockMvc.perform(
-                post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis+"\", \"users\": [\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
+        var chatCreation = mockMvc.perform(post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis + "\", \"users\": [\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(201, chatCreation.getStatus());
     }
-    @Test
-    public void should_ReturnBadRequest_then_createdChatWithExistedName()throws Exception{
-        long currentTimeMillis = System.currentTimeMillis();
-        var chatCreation = mockMvc.perform(
-                post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis+"\", \"users\": [\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
 
-        var chatCreationDublicate = mockMvc.perform(
-                post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis+"\", \"users\": [[\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)
-        ).andReturn().getResponse();
-        assertEquals(400,chatCreationDublicate.getStatus());
+    @Test
+    public void should_ReturnBadRequest_then_createdChatWithExistedName() throws Exception {
+        long currentTimeMillis = System.currentTimeMillis();
+        var chatCreation = mockMvc.perform(post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis + "\", \"users\": [\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+
+        var chatCreationDublicate = mockMvc.perform(post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis + "\", \"users\": [[\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        assertEquals(400, chatCreationDublicate.getStatus());
 
     }
 
