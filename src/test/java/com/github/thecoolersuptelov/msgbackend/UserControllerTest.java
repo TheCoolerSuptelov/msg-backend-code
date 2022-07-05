@@ -19,11 +19,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TestUserApi {
+public class UserControllerTest {
 
     private final WebApplicationContext webAppContext;
     public MockMvc mockMvc;
-    public TestUserApi(WebApplicationContext webAppContext){
+    public UserControllerTest(WebApplicationContext webAppContext){
 
         this.webAppContext = webAppContext;
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
@@ -59,6 +59,6 @@ public class TestUserApi {
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
                 .getResponse();
-        assertEquals(422,doubleResponseUserCreation.getStatus());
+        assertEquals(400,doubleResponseUserCreation.getStatus());
     }
 }
