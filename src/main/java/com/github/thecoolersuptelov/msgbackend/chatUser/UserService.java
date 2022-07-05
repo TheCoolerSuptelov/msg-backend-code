@@ -1,6 +1,8 @@
 package com.github.thecoolersuptelov.msgbackend.chatUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,7 +17,11 @@ public class UserService {
         return userRepository;
     }
 
-    public User addNewUser(UserDto userToCreation) {
+    public User addNewUser(UserDto userToCreation) throws UserException {
+        if (isUserExist(userToCreation.getUsername())) {
+          throw new UserException("User with this username already exist."
+                  + " Please, change username and try again.");
+        }
         var createdUser = new User(userToCreation);
         userRepository.save(createdUser);
         return createdUser;

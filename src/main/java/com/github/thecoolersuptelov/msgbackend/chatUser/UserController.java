@@ -18,13 +18,13 @@ public class UserController {
 
     @PostMapping(path = "add")
     public ResponseEntity<String> createUser(@RequestBody UserDto userFromRequest) {
-        if (userService.isUserExist(userFromRequest.getUsername())) {
-            return new ResponseEntity<>("User with this username already exist."
-                    + " Please, change username and try again.", HttpStatus.UNPROCESSABLE_ENTITY);
+        try {
+            return new ResponseEntity<>(userService.addNewUser(userFromRequest).getId().toString(),
+                    HttpStatus.CREATED
+            );
+        } catch (UserException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(userService.addNewUser(userFromRequest).getId().toString(),
-                HttpStatus.CREATED
-        );
     }
 
 }

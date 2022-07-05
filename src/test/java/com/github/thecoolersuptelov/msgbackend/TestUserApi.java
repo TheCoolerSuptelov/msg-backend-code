@@ -31,7 +31,7 @@ public class TestUserApi {
 
     @Test
     @Order(1)
-    public void userCreationTest() throws Exception {
+    public void should_ReturnCreated_Then_CreateUser() throws Exception {
         long currentTimeMillis = System.currentTimeMillis();
         var responseUserCreation = mockMvc.perform(
                 post("/users/add")
@@ -43,7 +43,7 @@ public class TestUserApi {
     }
 
     @Test
-    public void shouldRaiseErrorDuplicateUsernameCreation() throws Exception {
+    public void should_ReturnBadRequest_Then_DuplicateUsernameCreation() throws Exception {
         long currentTimeMillis = System.currentTimeMillis();
         var responseUserCreation = mockMvc.perform(
                         post("/users/add")
