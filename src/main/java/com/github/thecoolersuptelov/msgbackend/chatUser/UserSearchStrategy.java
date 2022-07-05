@@ -1,7 +1,7 @@
 package com.github.thecoolersuptelov.msgbackend.chatUser;
 
 public enum UserSearchStrategy {
-    ByID("Id"), ByUsername("UserName");
+    BY_ID("Id"), BY_USERNAME("UserName");
 
     private final String searchAttribute;
     private Object searchAlgo;

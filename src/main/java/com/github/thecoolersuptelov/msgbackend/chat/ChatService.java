@@ -43,14 +43,14 @@ public class ChatService {
             throw new ChatCreationException("Chat with that name already exist. Please, change name and try again.");
         }
         if (userSearchAttribute == null) {
-            userSearchAttribute = UserSearchStrategy.ByID;
+            userSearchAttribute = UserSearchStrategy.BY_ID;
         }
 
         Set<User> usersInChat = null;
-        if (UserSearchStrategy.ByUsername == userSearchAttribute) {
+        if (UserSearchStrategy.BY_USERNAME == userSearchAttribute) {
             usersInChat = userRepository.findByUsernameIn(chat.getUsers());
         } else {
-            usersInChat = userRepository.findByIdIn(chat.getUsers().stream().map(e -> UUID.fromString(e)).collect(Collectors.toSet()));
+            usersInChat = userRepository.findByIdIn(chat.getUsers().stream().map(UUID::fromString).collect(Collectors.toSet()));
         }
         if (chat.getUsers().size() != usersInChat.size()) {
             throw new ChatCreationException(buildErrorDescriptionUsersNotFound(chat.getUsers(), usersInChat));
@@ -65,7 +65,7 @@ public class ChatService {
 
     public String buildErrorDescriptionUsersNotFound(Set<String> users, Set<User> usersAlreadyExist) {
 
-        String notFoundedUsernames = usersAlreadyExist.stream().filter(e -> !users.contains(e)).map(e -> e.getUsername()).collect(Collectors.joining(","));
+        String notFoundedUsernames = usersAlreadyExist.stream().map(User::getUsername).filter(e -> !users.contains(e)).collect(Collectors.joining(","));
 
         return "Cannot create chat.Users not found: " + notFoundedUsernames;
     }
@@ -76,6 +76,6 @@ public class ChatService {
 
     public List<ChatDto> getAllChatsByUser(UUID userUuid, Integer pageNo, Integer pageSize) {
         var paging = PageRequest.of(pageNo, pageSize);
-        return chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid, paging).stream().map(ChatDto::new).collect(Collectors.toList());
+        return chatRepository.findAllChatsByUserSortedByLatestMessage(userUuid, paging).stream().map(ChatDto::new).toList();
     }
 }

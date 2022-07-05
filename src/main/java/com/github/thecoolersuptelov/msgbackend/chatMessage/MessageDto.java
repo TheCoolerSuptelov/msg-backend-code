@@ -60,9 +60,7 @@ public class MessageDto implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MessageDto entity = (MessageDto) o;
-        return Objects.equals(this.chat, entity.chat) &&
-                Objects.equals(this.author, entity.author) &&
-                Objects.equals(this.text, entity.text);
+        return Objects.equals(this.chat, entity.chat) && Objects.equals(this.author, entity.author) && Objects.equals(this.text, entity.text);
     }
 
     @Override
@@ -72,8 +70,6 @@ public class MessageDto implements Serializable {
 
     @Override
     public String toString() {
-        return "" +
-                "id=" + id +
-                ' ';
+        return "" + "id=" + id + ' ';
     }
 }

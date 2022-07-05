@@ -20,16 +20,16 @@ public class ChatController {
     }
 
     @PostMapping(value = "addByUsername")
-    public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest) {
-        return createChatWithUsers(chatFromRequest, UserSearchStrategy.ByID);
+    public ResponseEntity<String> createChatWithUsersByUsername(@RequestBody ChatDto chatFromRequest) throws ChatCreationException {
+        return createChatWithUsers(chatFromRequest, UserSearchStrategy.BY_ID);
     }
 
     @PostMapping(value = "add")
-    public ResponseEntity<String> createChatWithUsers(@RequestBody ChatDto chatFromRequest, UserSearchStrategy findBy) {
+    public ResponseEntity<String> createChatWithUsers(@RequestBody ChatDto chatFromRequest, UserSearchStrategy findBy) throws ChatCreationException {
         try {
             return chatService.addNewChat(chatFromRequest, findBy);
         } catch (ChatCreationException e) {
-            throw new RuntimeException("Cannot create chat." + e.getMessage());
+            throw new ChatCreationException("Cannot create chat." + e.getMessage());
         }
     }
 

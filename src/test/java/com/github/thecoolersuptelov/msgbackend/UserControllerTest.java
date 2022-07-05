@@ -18,27 +18,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UserControllerTest {
+class UserControllerTest {
 
-    private final WebApplicationContext webAppContext;
     public MockMvc mockMvc;
 
     public UserControllerTest(WebApplicationContext webAppContext) {
 
-        this.webAppContext = webAppContext;
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
     }
 
     @Test
     @Order(1)
-    public void should_ReturnCreated_Then_CreateUser() throws Exception {
+    void should_ReturnCreated_Then_CreateUser() throws Exception {
         long currentTimeMillis = System.currentTimeMillis();
         var responseUserCreation = mockMvc.perform(post("/users/add").content("{\"username\": \"user_" + currentTimeMillis + "\"}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(201, responseUserCreation.getStatus());
     }
 
     @Test
-    public void should_ReturnBadRequest_Then_DuplicateUsernameCreation() throws Exception {
+    void should_ReturnBadRequest_Then_DuplicateUsernameCreation() throws Exception {
         long currentTimeMillis = System.currentTimeMillis();
         var responseUserCreation = mockMvc.perform(post("/users/add").content("{\"username\": \"user_" + currentTimeMillis + "\"}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(201, responseUserCreation.getStatus());

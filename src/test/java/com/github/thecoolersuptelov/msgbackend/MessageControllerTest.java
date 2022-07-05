@@ -17,19 +17,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MessageControllerTest {
-    private final WebApplicationContext webAppContext;
+class MessageControllerTest {
     public MockMvc mockMvc;
 
     public MessageControllerTest(WebApplicationContext webAppContext) {
 
-        this.webAppContext = webAppContext;
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
     }
 
     @Test
     @Order(1)
-    public void should_ReturnCreated_then_createdMessage() throws Exception {
+    void should_ReturnCreated_then_createdMessage() throws Exception {
         var chatCreation = mockMvc.perform(post("/messages/add")
                 .content("{\"chat\": \"00000000-aab4-4402-af57-bbce2b05fb63\", \"author\":\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"text\":\"Sometextdata\"}")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();

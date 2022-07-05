@@ -25,9 +25,7 @@ public class Chat {
     private String name;
 
     @ManyToMany(cascade = CascadeType.DETACH)
-    @JoinTable(name = "chat_users",
-            joinColumns = @JoinColumn(name = "chat_id"),
-            inverseJoinColumns = @JoinColumn(name = "users_id"))
+    @JoinTable(name = "chat_users", joinColumns = @JoinColumn(name = "chat_id"), inverseJoinColumns = @JoinColumn(name = "users_id"))
     private Set<User> users = new LinkedHashSet<>();
 
     public Set<User> getUsers() {
