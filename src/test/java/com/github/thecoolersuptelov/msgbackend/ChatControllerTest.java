@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
@@ -42,6 +43,17 @@ class ChatControllerTest {
         var chatCreationDublicate = mockMvc.perform(post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis + "\", \"users\": [[\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
         assertEquals(400, chatCreationDublicate.getStatus());
 
+    }
+
+    @Test
+    void should_ReturnBadRequest_then_createdChatWithNonExistedUser() throws Exception {
+        long currentTimeMillis = System.currentTimeMillis();
+        String invalidId = "90000000-5f19-40a5-8109-f3cadee4519b";
+        var chatCreation = mockMvc.perform(post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis + "\", \"users\": [\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"" + invalidId+"\"]}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+
+        assertEquals(400, chatCreation.getStatus());
+        assertTrue(chatCreation.getContentAsString().contains(invalidId));
+       // assertTrue(chatCreation.getContentAsString().contains());
     }
 
 }

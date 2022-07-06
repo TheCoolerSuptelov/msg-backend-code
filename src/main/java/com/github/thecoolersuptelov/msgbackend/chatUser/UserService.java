@@ -25,10 +25,6 @@ public class UserService {
         return createdUser;
     }
 
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
-    }
-
     public boolean isUserExist(String username) {
         return userRepository.existsByUsernameEquals(username);
     }

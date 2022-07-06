@@ -29,7 +29,7 @@ public class ChatController {
         try {
             return chatService.addNewChat(chatFromRequest, findBy);
         } catch (ChatCreationException e) {
-            throw new ChatCreationException("Cannot create chat." + e.getMessage());
+            return new ResponseEntity<>("Cannot create chat." + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

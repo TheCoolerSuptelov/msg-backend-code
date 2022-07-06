@@ -19,7 +19,7 @@ public class ChatService {
     @Autowired
     private final UserRepository userRepository;
     @Autowired
-    private ChatRepository chatRepository;
+    private final ChatRepository chatRepository;
 
     public ChatService(ChatRepository chatRepository, UserRepository userRepository) {
         this.chatRepository = chatRepository;
@@ -28,10 +28,6 @@ public class ChatService {
 
     public ChatRepository getChatRepository() {
         return chatRepository;
-    }
-
-    public void setChatRepository(ChatRepository chatRepository) {
-        this.chatRepository = chatRepository;
     }
 
     boolean isUserInAChat(ChatDto chat) {
@@ -64,10 +60,8 @@ public class ChatService {
     }
 
     public String buildErrorDescriptionUsersNotFound(Set<String> users, Set<User> usersAlreadyExist) {
-
-        String notFoundedUsernames = usersAlreadyExist.stream().map(User::getUsername).filter(e -> !users.contains(e)).collect(Collectors.joining(","));
-
-        return "Cannot create chat.Users not found: " + notFoundedUsernames;
+        // awful. refactor.
+        return "Cannot create chat.Users not found: " + users.stream().filter(e -> !usersAlreadyExist.stream().map(a -> a.getId().toString()).toList().contains(e)).collect(Collectors.joining(","));
     }
 
     public boolean existUserInChat(UUID chatId, UUID userId) {
