@@ -53,7 +53,6 @@ class ChatControllerTest {
 
         assertEquals(400, chatCreation.getStatus());
         assertTrue(chatCreation.getContentAsString().contains(invalidId));
-       // assertTrue(chatCreation.getContentAsString().contains());
     }
 
 }
