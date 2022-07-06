@@ -1,6 +1,7 @@
 package com.github.thecoolersuptelov.msgbackend;
 
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,12 +23,16 @@ public class EndToEndApiTest {
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
     }
-
+    @Test
     void should_createUser_createChat_sendMessagesFromUserInChat() throws Exception {
         long currentTimeMillis = System.currentTimeMillis();
         var responseUserCreation = mockMvc.perform(post("/users/add").content("{\"username\": \"user_" + currentTimeMillis + "\"}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
-        var chatCreation = mockMvc.perform(post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis + "\", \"users\": [\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"00000000-5f19-40a5-8109-f3cadee4519b\"]}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
-        var messageCreated = mockMvc.perform(post("/messages/add").content("{\"chat\": \"00000000-aab4-4402-af57-bbce2b05fb63\", \"author\":\"00000000-b91c-4ef3-9e78-51c35c3b65da\", \"text\":\"Sometextdata\"}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
-
+        assertEquals(201, responseUserCreation.getStatus());
+        String userId = responseUserCreation.getContentAsString();
+        var chatCreation = mockMvc.perform(post("/chats/add").content("{\"name\": \"chat_" + currentTimeMillis + "\", \"users\": [\""+userId+"\"]}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        assertEquals(201, chatCreation.getStatus());
+        String chatID = chatCreation.getContentAsString();
+        var messageCreated = mockMvc.perform(post("/messages/add").content("{\"chat\": \""+chatID+"\", \"author\":\""+ userId+"\", \"text\":\"Sometextdata\"}").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        assertEquals(201, messageCreated.getStatus());
     }
 }
