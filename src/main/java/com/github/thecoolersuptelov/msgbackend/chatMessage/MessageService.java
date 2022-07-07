@@ -25,9 +25,10 @@ public class MessageService {
         if (!existUserInChat(chat, author)) {
             throw new MessageCreationException("User doesn't exist in that chat.");
         }
+
         var userAuthor = userRepository.findById(author).get();
         var chatPersist = chatRepository.findById(chat).get();
-
+//        var xx = messageRepository.findAuthorIdAndChatId(author,chat);
         Message message = new Message(chatPersist, userAuthor, textMessage);
         messageRepository.save(message);
         return message.getId().toString();

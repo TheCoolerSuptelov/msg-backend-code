@@ -43,6 +43,11 @@ public class Message {
         this.text = text;
     }
 
+    public Message(Chat chat, User author) {
+        this.chat = chat;
+        this.author = author;
+    }
+
     public Timestamp getCreated_at() {
         return created_at;
     }
