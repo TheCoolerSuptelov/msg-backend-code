@@ -20,6 +20,7 @@ public class UserController {
     }
 
     @ExceptionHandler(UserException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handlingException(RuntimeException e){
         return e.getMessage();
     }
