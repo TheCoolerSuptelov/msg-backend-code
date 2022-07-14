@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  run:
+    container_name: pgSql-test2
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    ports:
+      - '1000:5432'
+    environment:
+      - POSTGRES_USER=msgbackend_test
+      - POSTGRES_PASSWORD=msgbackend_test
+      - POSTGRES_DB=msgbackend_test-d
+    image: run
