@@ -3,6 +3,7 @@ package com.github.thecoolersuptelov.msgbackend.chatMessage;
 import com.github.thecoolersuptelov.msgbackend.chat.Chat;
 import com.github.thecoolersuptelov.msgbackend.chatUser.User;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
